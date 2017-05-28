@@ -1,0 +1,30 @@
+﻿void RadixSort(long a[], int n)
+{
+    int i, j, d;
+    int h = 10;        // biến để lấy các con số, bắt đầu từ hàng đơn vị
+    long B[10][MAX];    // mảng hai chiều chứa các phần tử phân lô
+    int  Len[10];        // kích thước của từng mảng B[i]
+    // MAXDIGIT là số con số tối đa của các phần tử a[i]
+    for(d = 0; d < MAXDIGIT; d++)    
+    {
+        // khởi tạo kích thước các dãy B[i] là 0
+        for( i = 0; i < 10; i++)
+            Len[i] = 0;
+        // thực hiện phân lô các phần tử theo con số hàng thứ d tính từ cuối
+        for(i = 0; i < n; i++)    // duyệt qua tất cả các phần tử của mảng
+        {
+            digit = (a[i] % h) / (h/ 10);    // lấy con số theo hàng h
+            // đưa vào dãy (lô) B[digit] ở cột Len[digit]
+            B[digit][Len[digit]++] = a[i];    
+        }// end for i
+        // thực hiện nối lại tuần tự từ B[0] – đến B[9] vào mảng a[] ban đầu
+        num = 0;    // chỉ số bắt đầu cho mảng a[]
+        for(i = 0; i < 10; i++)    // duyệt qua các dãy từ B[0] – đến B[9]
+        {
+            // lấy từng phần tử của từng dãy B[i]
+            for(j =0; j < Len[i]; j++)
+                a[num++] = B[i][j];
+        }// end for i
+        h *= 10;    // qua hàng kế tiếp.
+    }// end for d    
+}// end RadixSort

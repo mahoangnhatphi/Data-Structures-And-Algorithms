@@ -1,0 +1,8 @@
+1;Bui van tien;1930;Kinh doanh go quy;;10
+10;Tran thi hoa; 1935;Noi tro
+5; Bui van gia; 1945; Bo; 1
+15;Bui van truc;1968;Dai gia;5;18
+16;Tran thi lan; 1965;Kinh doanh cafe
+18;Bui dat; 1998; Du hoc sinh Cambridge
+
+

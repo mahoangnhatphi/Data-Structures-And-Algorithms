@@ -1,0 +1,758 @@
+Xin chào m?i ng??i!
+Lâu l?m r?i mình m?i có th? ??ng vào blog (xin l?i m?i ng??i th?t nhi?u ? ), 1 ph?n vì mình có bài t?p, 1 ph?n khác vì mình ?ang có 1 project riêng cho b?n thân (s?p ti?t l? ? ), nên th?i gian này mình ít lên blog ???c. Mong các b?n thông c?m (nh?m m?t) b? qua cho :D.
+V?i m?i máy tính thông d?ng thì t?t nhiên ai c?ng có 1 ph?n m?m là “WinRAR”. V?y ?ã bao gi? các b?n t? h?i r?ng nó nén d? li?u b?ng cách nào mà thông minh quá, ch? vài thao tác là nén dc c? tr?m MB? Sau ?ây mình xin li?t kê 1 thu?t toán c?ng r?t hay, ?ó là nén Huffman.
+? bài vi?t này mình xin s? d?ng nén Huffman t?nh, ph?n sau mình s? nói v? nén Huffman ??ng ?
+1. Khái ni?m
+Nén Huffman t?nh là 1 d?ng nén không m?t d? li?u (lossless data). Nó d?a trên b?ng t?n su?t các kí t? xu?t hi?n ?? xây d?ng mã nh? phân cho các kí t? ?ó sao cho s? bit là nh? nh?t.
+Gi?i thu?t ???c ?? xu?t b?i David A. Huffman, và công b? vào n?m 1952.
+David A. Huffman
+?? mã hoá các kí t? ?ó, ta thay các kí t? b?ng mã nh? phân ch?ng h?n nh? b? mã ASCII mã hoá ???c 256 kí t? (ví d? nh? kí t? ‘A‘ là 1000001, trong khi ‘a‘ l?i là 1100001). V?i cách mã hoá này, ta ph?i dùng 8 bit ?? bi?u di?n 1 ký t?, r?t là tiêu t?n b? nh?. Ngoài ra, khi mã hoá d? li?u có th? không c?n dùng h?t 256 kí t?, và trong chu?i có th? có nh?ng kí t? xu?t hi?n r?t nhi?u l?n, có nh?ng kí t? thì l?i xu?t hi?n 1 2 l?n,…
+Cùng nhau phân tích th? chu?i trên nhé!
+? chu?i trên, ta phân tích ra nh? sau: s(8), e(7), space(5), h(4), l(4), a(2), b(1), y(1), o(1), r(1), dot(1).
+Ta nh?n ra r?ng, kí t? ‘s‘ xu?t hi?n t?n 8 l?n, nh?ng kí t? ‘r‘ ch? xu?t hi?n ?úng 1 l?n. N?u ta dùng 8 bit c? ??nh ?? bi?u di?n thì r?t … m?t :v. Vì v?y nên ta có th? bi?u di?n b?ng s? bit “linh ??ng” h?n, kí t? nào xu?t hi?n nhi?u thì dùng bit ít, và ng??c l?i.
+Tuy nhiên 1 v?n ?? phát sinh là, n?u ta mã hoá v?i s? bit linh ??ng trên thì làm th? nào ta có th? phân bi?t ???c dãy bit nào bi?u di?n cho kí t? nào? Ta có th? dùng d?u ph?y ?? ng?n cách gi?a các bit, ho?c s? d?ng kí hi?u nào ?ó. Nh?ng n?u v?y thì d?u ph?y s? chi?m 1 vùng b? nh? ?áng k? trong dãy. Vì v?y nên ta có khái ni?m v? mã ti?n t?.
+2. Mã ti?n t? (prefix-free binary code)
+Mã ti?n t? là b? mã c?a 1 t?p h?p các kí hi?u sao cho m?i kí hi?u không là ti?n t? (ph?n ??u) c?a các kí hi?u khác trong t?p h?p. Ta có th? hi?u mã hoá v?i ?? dài không ??i c?ng là mã ti?n t?.
+Ví d?: Gi? s? ta mã hoá t? “ARRAY“
+Ta nh?n th?y trong dãy có các kí t? ‘A‘, ‘R‘, ‘Y‘
+N?u mã hoá b?ng dãy bit có ?? dài c? ??nh, ta ph?i dùng ít nh?t 2 bit cho 1 ký t? (‘A‘ => 00, ‘R‘ => 01, ‘Y‘ => 11). Khi ?ó dãy bit s? là 0001010010. ?? gi?i mã, ta ch? c?n ??c 2 bit m?t và ??i chi?u v?i b?ng mã.
+N?u mã hoá ‘A‘ => 0, ‘R‘ => 01, ‘Y‘ => 11 thì b? mã này không là mã ti?n t? (vì ‘R‘ => 01 có th? hi?u là kí t? ‘A‘ kèm theo bit 1). ?? mã hoá, ta c?n ph?i ??t các d?u ph?y vào gi?a (0, 01, 01, 0, 11).
+N?u mã hoá ‘A‘ => 0, ‘R‘ => 10, ‘Y‘ => 11 thì b? mã này là mã ti?n t?. Lúc ?ó dãy bit s? là 01010011.
+Ta bi?u di?n mã ti?n t? b?ng cây nh? phân nh? sau:
+Bi?u di?n b?ng cây nh? phân.
+V?i m?i kí t?, ta có th? bi?u di?n b?ng dãy bit nh? sau: khi ?i t? g?c (root) t?i lá (leaf) ch?a kí t? ?ó, n?u ?i qua c?nh trái thì ta thêm s? 0 vào dãy bit, n?u ?i qua c?nh ph?i thì thêm s? 1 vào. ? cây nh? phân trên, ‘A‘ => 0, ‘R‘ => 10, ‘Y‘ => 11.
+Ta có th? th?y, v?i cách bi?u di?n thông th??ng, ta m?t kho?ng 40 bits (5 bytes) ?? bi?u di?n chu?i “ARRAY“. Tuy nhiên v?i mã ?? dài c? ??nh (0001010010), ta m?t kho?ng 10 bits, ti?t ki?m ???c 75%. V?i mã ti?n t? (01010011), ta m?t kho?ng 8 bits, ti?t ki?m ???c lên t?i 80%.
+3. Gi?i thu?t Huffman t?nh
+Gi? s? ta có dãy nh? sau: s = “AAAAAABCCCCCCDDEEEEE“
+T?n su?t: A(6), B(1), C(6), D(2), E(5). Bi?u di?n thông th??ng: sizeof(s) = (6 + 1 + 6 + 2 + 5)*8 = 160 bits. Tuy nhiên, n?u ta áp d?ng mã ti?n t? ? trên, ta s? thu ???c: ‘A‘ => 00, ‘C‘ => 01, ‘E‘ => 10, ‘B‘ => 110, ‘D‘ => 111. Vì v?y lúc này: sizeof(s’) = 6 * 2 + 1 * 3 + 6 * 2 + 2 * 3 + 5 * 2 = 43 bits.
+Ta có thu?t toán nh? sau:
+[B1] Duy?t t?p tin => L?p b?ng th?ng kê t?n s? xu?t hi?n c?a các kí t?.
+[B2] Xây d?ng cây Huffman d?a vào b?ng t?n s? ?ã l?p ? trên.
+[B3] Phát sinh b?ng mã bit cho t?ng kí t? t??ng ?ng.
+[B4] Duy?t t?p tin l?n 2 => Thay th? các kí t? trong t?p tin b?ng mã bit t??ng ?ng.
+[B5] L?u l?i cây Huffman ?? gi?i nén.
+Cây Huffman cho tr??ng h?p trên.
+Thu?t toán ?? t?o cây Huffman:
+[B1] S?p x?p b?ng t?n s? các ký t?.
+[B2] Ch?n 2 ph?n t? ??u ?? t?o node x, y có tr?ng s? là t?n s?. T?o node z là cha c?a node x, y có tr?ng s? b?ng t?ng tr?ng s? c?a 2 node con.
+[B3] Lo?i b? 2 node x, y ra kh?i b?ng, sau ?ó thêm node z vào sao cho b?ng t?n s? v?n t?ng/gi?m d?n.
+[B4] L?p l?i B1-3 sao cho ch? còn 1 ph?n t? trong b?ng.
+Ta c?n xây d?ng 2 struct:
+Mã ngu?n:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+struct Node
+{
+    char c;
+    int freq;
+    Node* left;
+    Node* right;
+    Node()
+    {
+        c = '\0';
+        freq = -1;
+        left = NULL;
+        right = NULL;
+    }
+};
+ 
+// Struct này có công d?ng l?u tr? bit ?ã mã hoá theo mã ti?n t?
+struct Bit
+{
+    char c;
+    string bit;
+};
+Xây d?ng class ?? nén:
+Mã ngu?n:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+class HuffmanCompression
+{
+private:
+    string data; // L?u tr? chu?i ??c vào t? file
+    Node* root;
+    vector<Bit> bit; // L?u tr? mã bit t??ng ?ng v?i ký t? ta xét
+    string bitTree; // Cây Huffman ???c mã hoá ?? l?u vào file
+    void convertTree();
+    void visit(Node* curr, string bit);
+    void generateTree(Node* curr);
+public:
+    HuffmanCompression() { bitTree = ""; }
+    HuffmanCompression(string filePath);
+    void compression(string outputPath);
+};
+Ti?p theo ta c?n l?p b?ng t?n s? ?? phát sinh cây Huffman:
+Mã ngu?n:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+void HuffmanCompression::convertTree()
+{
+    vector<Node*> tree;
+    // L?p b?ng t?n s?
+    // Duy?t h?t chu?i ?? ki?m tra
+    for (int i = 0; i < data.length(); i++)
+    {
+        bool existed = false;
+        // Duy?t trong b?ng, n?u ký t? ta xét ?ã có trong b?ng thì ++freq
+        for (int j = 0; j < tree.size(); j++) 
+                {
+            if (tree[j]->c == data[i])
+            {
+                tree[j]->freq++;
+                existed = true;
+                break;
+            }
+        }
+        // Ng??c l?i thì thêm ký t? ?ó vào b?ng
+        if (!existed)
+        {
+            Node* node = new Node();
+            node->c = data[i];
+            node->freq = 1;
+            tree.push_back(node);
+        }
+    }
+ 
+    // Ti?p theo là s?p x?p l?i b?ng t?n s?
+    for (int i = 0; i < tree.size() - 1; i++)
+    {
+        for (int j = i + 1; j < tree.size(); j++)
+                {
+                        if (tree[i]->freq > tree[j]->freq)
+            {
+                Node* temp = tree[i];
+                tree[i] = tree[j];
+                tree[j] = temp;
+            }
+        }
+    }
+     
+    while (true)
+    {
+        // T?o node z có con là 2 ph?n t? ??u trong b?ng t?n s?
+        Node* tmp = new Node();
+        tmp->left = tree[0];
+        tmp->right = tree[1];
+        tmp->freq = tmp->left->freq + tmp->right->freq;
+ 
+        // Xoá 2 ph?n t? ??u trong b?ng t?n s?
+        tree.erase(tree.begin(), tree.begin() + 2);
+        tree.resize(tree.size() + 1);
+ 
+        // N?u ch? còn ?úng 1 ph?n t?
+        if (tree.size() == 1)
+        {
+            tree[0] = tmp;
+            break;
+        }
+        else
+        {
+            // Chèn v? trí node z vào b?ng t?n s? sao cho phù h?p
+            // ? ?ây mình s?p x?p gi?m d?n
+            for (int j = 0; j < tree.size() - 1; j++)
+                        {
+                                bool isMax = true;
+                                if (tree[j]->freq > tmp->freq)
+                {
+                    for (int k = tree.size() - 1; k > j; k--)
+                    {
+                        tree[k] = tree[k - 1];
+                    }
+                    tree[j] = tmp;
+                    isMax = false;
+                    break;
+                }
+                if (isMax) tree[tree.size() - 1] = tmp;
+            }
+        }
+    }
+ 
+    // Cu?i cùng ta thu ???c cây Huffman là ph?n t? duy nh?t còn l?i trong b?ng t?n s?
+    root = tree[0];
+}
+Ngoài ra, ta còn ph?i mã hoá cây Huffman thành dãy bit ?? l?u vào file.
+N?u node là lá: Xu?t ra bit ‘1’ và 8 bit ký t? trong lá ?ó.
+N?u node không là lá: Xu?t ra bit ‘0’. Sau ?ó g?i ?? quy ??n 2 node con bên trong.
+V?i tr??ng h?p chu?i “AAAAAABCCCCCCDDEEEEE“, ta xây d?ng cây Huffman thì chu?i bit c?a cây s? là: 0001B1D1E01A1C (0001010000101010001001010001010101000001101000011).
+Mã ngu?n:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+void HuffmanCompression::generateTree(Node* curr)
+{
+    if (curr != NULL)
+    {
+        // N?u node là lá
+        if (curr->left == NULL && curr->right == NULL)
+        {
+            bitTree += '1';
+            bitset<8> bitSq(curr->c);
+            bitTree += bitSq.to_string();
+        }
+        // Ng??c l?i
+        else
+        {
+            bitTree += '0';
+            generateTree(curr->left);
+            generateTree(curr->right);
+        }
+    }
+}
+T? cây Huffman ?ã t?o, ta phát sinh b?ng mã bit cho các kí t?:
+Mã ngu?n:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+void HuffmanCompression::visit(Node* curr, string bit)
+{
+    if (curr != NULL)
+    {
+        if (curr->left == NULL || curr->right == NULL)
+        {
+            Bit cBit;
+            cBit.c = curr->c;
+            cBit.bit = bit;
+            this->bit.push_back(cBit);
+        }
+        else
+        {
+            visit(curr->left, bit + "0");
+            visit(curr->right, bit + "1");
+        }
+    }
+}
+Cu?i cùng, ta có 1 method compression(string outputPath) ?? ghi k?t qu? ra file:
+Mã ngu?n:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+// Hàm dùng ?? chuy?n chu?i 8 bit thành ký t? t??ng ?ng
+char convertBitToChar(string input)
+{
+    char c = 0;
+    for (int i = 0; i < input.length(); i++)
+    {
+        c = (c << 1) | (input[i] - 48);
+    }
+    return c;
+}
+ 
+// Hàm dùng ?? chuy?n chu?i bit sang chu?i ký t? t??ng ?ng
+std::string convertBitStringToCharString(string input)
+{
+    string result = "";
+    while (input.length() > 0)
+    {
+        string temp;
+        if (input.length() > 8)
+        {
+            temp = input.substr(input.length() - 8, 8);
+            input = input.erase(input.length() - 8, 8);
+        }
+        else
+        {
+            temp = input;
+            if (temp.length() > 8) temp = "0" + temp;
+            input = "";
+        }
+        result = convertBitToChar(temp) + result;
+    }
+    return result;
+}
+ 
+void HuffmanCompression::compression(string outputPath)
+{
+    this->convertTree();
+    this->visit(root, "");
+    this->generateTree(root);
+ 
+    // Thay th? các kí t? trong chu?i data thành mã bit t??ng ?ng trong b?ng t?n s?
+    string bitSq = "";
+    for (int i = 0; i < data.length(); i++)
+    {
+        for (int j = 0; j < bit.size(); j++)
+        {
+            if (data[i] == bit[j].c)
+            {
+                bitSq += bit[j].bit;
+                break;
+            }
+        }
+    }
+ 
+    // Mã hoá bit cây Huffman và bit data thành ký t? ?? l?u vào file
+    string main = convertBitStringToCharString(bitTree + bitSq);
+    int realBit = 0, sizeBit = (bitTree + bitSq).length();
+ 
+    // Do ?? dài bit c?a bitTree và bitSq không là b?i c?a 8
+    // Ta c?n xác ??nh có bao nhiêu bit '0' ???c thêm vào chu?i bit bitTree và bitSq
+    while (realBit < sizeBit) realBit += 8;
+    char addBit = realBit - sizeBit; 
+    // Ta c?n ph?i xác ??nh s? l??ng ký t? có trong chu?i 
+    char bitNum = this->bit.size();
+ 
+    ofstream fo(outputPath);
+    fo << (char)bitNum << (char)addBit << main;
+    fo.close();
+}
+4. Gi?i nén
+Gi?i thu?t ?? d?ch ng??c chu?i bit d?a vào cây Huffman:
+?i t? g?c cây Huffman, ??c t?ng bit t? t?p tin ?ã nén:
+N?u là bit 0: ta r? sang nhánh trái
+N?u là bit 1: ta r? sang nhánh ph?i
+N?u ??n node lá: xu?t ra kí t? t?i node lá này.
+L?p cho ??n khi nào h?t dãy bit c?a t?p tin trên.
+Ví d?: Chu?i bit ?ã mã hoá: 0000000000001100101010101011111111010101010
+Cây Huffman cho ví d? trên.
+Ta c?n xây d?ng class ?? gi?i nén:
+Mã ngu?n:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+class HuffmanExtraction
+{
+private:
+    string bitTree;
+    string data;
+    Node* root;
+    void generateTree(Node* curr);
+    char visit(Node* curr);
+public:
+    HuffmanExtraction() { root = new Node(); }
+    HuffmanExtraction(string filePath);
+    void extraction(string outputPath);
+};
+?? ??c 1 file ?ã mã hoá:
+Mã ngu?n:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+// Constructor c?a class trên
+HuffmanExtraction::HuffmanExtraction(string filePath)
+{
+    root = new Node();
+    string bitSequence = "";
+    ifstream fi(filePath, ios::binary);
+    char c;
+    // Ta không th? ??c 1 l?n toàn b? kí t? trong file
+    // Vì có th? ?âu ?ó trong file có ch?a kí t? '\0'
+    // N?u ta c? tình ??c thì chu?i bitSequence s? không th? l?u h?t ???c
+    // Vì v?y ta c?n ph?i ??c t?ng ký t? trong file
+    while (fi >> noskipws >> c)
+    {
+        bitset<8> bit(c);
+        bitSequence += bit.to_string();
+    }
+     
+    // L?y ra s? ký t? có trong chu?i mã hoá
+    char numChar = convertBitToChar(bitSequence.substr(0, 8));
+    bitSequence.erase(0, 8);
+ 
+    // L?y ra s? bit '0' ???c thêm vào nh? phía trên mình ?? c?p
+    char addBit = convertBitToChar(bitSequence.substr(0, 8));
+    bitSequence.erase(0, 8);
+ 
+    // B? ?i các bit '0' th?a
+    bitSequence.erase(0, addBit);
+ 
+    // S? bit c?n l?y tuân theo công th?c d??i ?ây
+    int sizeBit = 10 * numChar - 1;
+    bitTree = bitSequence.substr(0, sizeBit);
+    bitSequence.erase(0, sizeBit);
+    data = bitSequence;
+    fi.close();
+}
+K? ti?p, ta c?n ph?i tái xây d?ng l?i cây Huffman d?a trên chu?i bitTree ?ã có:
+N?u là bit ‘0’, ta xây d?ng 2 node con left và right, và g?i ?? quy ??n node con ?ó.
+N?u là bit ‘1’, ta ??c 8 bit ti?p theo và l?u vào node lá.
+Mã ngu?n:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+void HuffmanExtraction::generateTree(Node* curr)
+{
+    while (bitTree.length() > 0)
+    {
+        // N?u là node lá
+        if (curr->left != NULL && curr->right != NULL) return;
+ 
+        Node* node = new Node();
+        if (bitTree[0] == '0')
+        {
+            bitTree.erase(0, 1);
+            // Ta c?n ph?i xác ??nh xem mình nên g?i ?? quy ??n node trái hay ph?i
+            if (curr->left == NULL)
+            {
+                curr->left = node;
+                generateTree(curr->left);
+            }
+            else
+            {
+                curr->right = node;
+                generateTree(curr->right);
+            }
+        }
+         
+        // N?u g?p bit '1', ta get 8 bit k? ti?p
+        else
+        {
+            string temp = bitTree.substr(1, 8);
+            bitTree.erase(0, 9);
+             
+            // Hàm char convertBitToChar(string temp) dùng ?? xu?t ra ký t? t??ng ?ng v?i chu?i bit
+            node->c = convertBitToChar(temp);
+            if (curr->left == NULL) curr->left = node;
+            else curr->right = node;
+        }
+    }
+}
+K? ti?p, ta duy?t chu?i data d?a vào cây Huffman theo gi?i thu?t mình ?ã vi?t ? trên
+Mã ngu?n:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+char HuffmanExtraction::visit(Node* curr)
+{
+    if (curr->left == NULL && curr->right == NULL)
+    {
+        return curr->c;
+    }
+    if (data[0] == '0')
+    {
+        data.erase(0, 1);
+        visit(curr->left);
+    }
+    else
+    {
+        data.erase(0, 1);
+        visit(curr->right);
+    }
+}
+Cu?i cùng là ghi ra file
+Mã ngu?n:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+void HuffmanExtraction::extraction(string outputPath)
+{
+    this->generateTree(root);
+    root = root->left;
+    string result = "";
+    while (data.length() > 0) result += this->visit(root);
+    ofstream fo(outputPath);
+    fo << result;
+    fo.close();
+}
+V?y là ta ?ã xây d?ng thành công gi?i thu?t nén Huffman t?nh. Tuy nhiên ta nh?n ra gi?i thu?t này có 1 khuy?t ?i?m là ph?i duy?t 2 l?n file c?n nén, nh? v?y s? t?n chi phí nhi?u h?n. Ngoài ra ta còn ph?i l?u tr? cây Huffman trong d? li?u nén, nh? v?y s? t?ng kích th??c file nén. ? ph?n ti?p theo, mình s? h??ng d?n v? nén Huffman ??ng (Adaptive Huffman Compression), s? kh?c ph?c ???c nh?ng nh??c ?i?m trên.
+Trên ?ây là bài vi?t v? nén Huffman t?nh, c?m ?n các b?n ?ã chú ý theo dõi! H?n g?p l?i ? nh?ng ph?n ti?p theo!
+

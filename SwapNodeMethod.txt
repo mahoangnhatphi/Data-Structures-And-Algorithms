@@ -1,0 +1,25 @@
+public void swapNodes(int x, int y) {
+        if (x == y) {
+            return;
+        }
+        IntSLLNode prevX = getNode(x - 1), currX = getNode(x);
+        IntSLLNode prevY = getNode(y - 1), currY = getNode(y);
+        if (currX == null || currY == null) {
+            return;
+        }
+        if (prevX != null) {
+            prevX.next = currY;
+        } else //make y the new head
+        {
+            head = currY;
+        }
+        if (prevY != null) {
+            prevY.next = currX;
+        } else // make x the new head
+        {
+            head = currX;
+        }
+        IntSLLNode temp = currX.next;
+        currX.next = currY.next;
+        currY.next = temp;
+    }
